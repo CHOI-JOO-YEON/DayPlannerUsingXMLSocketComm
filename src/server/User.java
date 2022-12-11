@@ -14,12 +14,14 @@ import java.io.IOException;
 public class User {
     private static DocumentBuilderFactory factory;
     private static DocumentBuilder builder;
+    private static Document document;
 
     public User() {
 
         try {
             factory = DocumentBuilderFactory.newInstance();
             builder = factory.newDocumentBuilder();
+
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
@@ -27,26 +29,47 @@ public class User {
 
 
     public boolean isLogin(String id, String password) {
-        try {
-            Document document = builder.parse(new File("source/user.xml"));
-            NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                String userId = node.getChildNodes().item(1).getFirstChild().getNodeValue();
-                if (id.equals(userId)) {
-                    String userPassword = node.getChildNodes().item(3).getFirstChild().getNodeValue();
-                    if (userPassword.equals(password)) {
-                        return true;
-                    }
-                    return false;
+        updateUserDataByUserXML();
+        NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (getIdByNode(node).equals(id)) {
+                if (getPasswordByNode(node).equals(password)) {
+                    return true;
                 }
+                return false;
             }
+        }
+        return false;
+    }
+
+    public boolean isNonDuplicateId(String id) {
+        updateUserDataByUserXML();
+        NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (getIdByNode(node).equals(id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void updateUserDataByUserXML() {
+        try {
+            document=builder.parse(new File("source/user.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+    }
 
+    private String getPasswordByNode(Node node) {
+        return node.getChildNodes().item(3).getFirstChild().getNodeValue();
+    }
+
+    private String getIdByNode(Node node) {
+        return node.getChildNodes().item(1).getFirstChild().getNodeValue();
     }
 }
