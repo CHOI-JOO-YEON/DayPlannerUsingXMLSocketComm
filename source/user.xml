@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Fig. 8.12 : intro.xml             --><!-- Simple introduction to XML markup -->
+<!DOCTYPE userList SYSTEM "user.dtd" >
+<userList>
+    <user>
+        <id>Joo</id>
+        <password>1234</password>
+        <intro>My name is Joo</intro>
+    </user>
+</userList>
