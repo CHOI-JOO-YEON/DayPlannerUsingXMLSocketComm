@@ -8,11 +8,13 @@ import org.w3c.dom.Document;
 import server.User;
 
 
+import java.io.File;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class UserTest {
-    User user = new User();
+    User user = new User(new File("source/user.xml"));
     @Test
     void 로그인_테스트(){
         assertThat(user.isLogin("Joo", "1234")).isTrue();
