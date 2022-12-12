@@ -19,18 +19,7 @@ public class User {
     private static Document document;
     private static File userXML;
 
-    public static void main(String[] args) {
-        User user = new User(new File("source/user.xml"));
-        try {
-            Document newUser = builder.parse("source/test/newUser.xml");
-            user.getNewXML(newUser);
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
     public User(File userXML) {
 
         try {
@@ -43,18 +32,30 @@ public class User {
         }
     }
 
-    public Optional<Document> getNewXML(Document userDocument) {
-        Node node = userDocument.getDocumentElement();
-        if(!isNonDuplicateId(getIdByNode(node))){
+    public Optional<Document> getNewXML(NewUser newUser) {
+        if(!isNonDuplicateId(newUser.id)){
             return Optional.empty();
         }
-        return Optional.ofNullable(getNewUserAddedXML(userDocument));
+        return Optional.ofNullable(getNewUserAddedXML(newUser));
     }
 
-    private Document getNewUserAddedXML(Document userDocument) {
+    private Document getNewUserAddedXML(NewUser newUser) {
         updateUserDataByUserXML();
-        Element root = userDocument.getDocumentElement();
-        document.getDocumentElement().appendChild(root);
+
+        Node root = document.getDocumentElement();
+        Element user = document.createElement("user");
+        Element id = document.createElement("id");
+        Element password = document.createElement("password");
+        Element intro = document.createElement("intro");
+        id.appendChild(document.createTextNode(newUser.id));
+        password.appendChild(document.createTextNode(newUser.password));
+        intro.appendChild(document.createTextNode(newUser.intro));
+        user.appendChild(id);
+        user.appendChild(password);
+        user.appendChild(intro);
+        root.appendChild(user);
+
+
         return document;
     }
 
@@ -128,3 +129,4 @@ public class User {
 
     private String getIntroduceByNode(Node node) {return node.getChildNodes().item(5).getFirstChild().getNodeValue();}
 }
+
