@@ -5,17 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import server.User;
 
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,6 +34,12 @@ public class UserTest {
         Document document =  user.createIntroduceDocument("안녕하세요");
         String intro = document.getDocumentElement().getFirstChild().getNodeValue();
         assertThat(intro).isEqualTo("안녕하세요");
+    }
+
+    @Test
+    void userXML에서_자기소개_문자열_생성() {
+        String result = user.getIntroByUserXML("Joo");
+        assertThat(result).isEqualTo("My name is Joo");
     }
 
 }

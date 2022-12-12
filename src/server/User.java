@@ -64,6 +64,21 @@ public class User {
         return introduceDocument;
     }
 
+    public String getIntroByUserXML(String id) {
+        updateUserDataByUserXML();
+        String result="자기소개를 찾지 못 했습니다.";
+        NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (getIdByNode(node).equals(id)) {
+                result = getIntorByNode(node);
+                break;
+            }
+        }
+        return result;
+
+    }
+
     private void updateUserDataByUserXML() {
         try {
             document=builder.parse(new File("source/user.xml"));
@@ -81,4 +96,6 @@ public class User {
     private String getIdByNode(Node node) {
         return node.getChildNodes().item(1).getFirstChild().getNodeValue();
     }
+
+    private String getIntorByNode(Node node) {return node.getChildNodes().item(5).getFirstChild().getNodeValue();}
 }
