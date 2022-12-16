@@ -41,7 +41,6 @@ public class User {
 
     private Document getNewUserAddedXML(NewUser newUser) {
         updateUserDataByUserXML();
-
         Node root = document.getDocumentElement();
         Element user = document.createElement("user");
         Element id = document.createElement("id");
@@ -54,7 +53,6 @@ public class User {
         user.appendChild(password);
         user.appendChild(intro);
         root.appendChild(user);
-
 
         return document;
     }

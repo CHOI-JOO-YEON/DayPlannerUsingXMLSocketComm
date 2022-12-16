@@ -12,6 +12,9 @@ public class FileOutputView {
     private static TransformerFactory transformerFactory;
     private static Transformer transformer;
     private static Document document;
+    public FileOutputView(Document document) {
+        this.document = document;
+    }
 
     private void setTransformer() {
         try {
