@@ -17,16 +17,20 @@ import java.util.Optional;
 public class User {
     private static DocumentBuilderFactory factory;
     private static DocumentBuilder builder;
+
+    public Document getDocument() {
+        return document;
+    }
+
     private static Document document;
     private static File userXML;
 
-
     public User(File userXML) {
-
         try {
             factory = DocumentBuilderFactory.newInstance();
             builder = factory.newDocumentBuilder();
             this.userXML = userXML;
+            updateUserDataByUserXML();
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -128,7 +132,6 @@ public class User {
 
         NewUser newUser = new NewUser(id, password, intro);
         return newUser;
-
     }
 
     private String getPasswordByNode(Node node) {

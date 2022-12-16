@@ -19,10 +19,11 @@ public class Server {
     public void runServer() {
         try {
             socket = new ServerSocket(10020, 100);
-            Socket clientSocket = socket.accept();
-            Controller controller = new Controller(clientSocket);
-            controller.serverControl();
-
+            while (true) {
+                Socket clientSocket = socket.accept();
+                Controller controller = new Controller(clientSocket);
+                controller.serverControl();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {

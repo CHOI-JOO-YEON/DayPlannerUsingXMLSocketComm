@@ -16,10 +16,18 @@ public class InputView {
     String getUserOrderByInputStream() throws IOException {
         return bufferedReader.readLine();
     }
+    InputSource getUserSourceByInputStream() throws IOException {
+        int bufferSize=0;
+        while (bufferSize==0) {
+            bufferSize = getBufferSize();
+        }
+        return getUserSource(bufferSize);
+    }
+
     int getBufferSize() throws IOException {
         return inputStream.available();
     }
-    InputSource getUserSourceByInputStream(int bufferSize) throws IOException {
+    InputSource getUserSource(int bufferSize) throws IOException {
         byte buf[] = new byte[bufferSize];
         inputStream.read(buf);
         return new InputSource(new ByteArrayInputStream(buf));
