@@ -6,6 +6,7 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Server {
 
@@ -25,6 +26,8 @@ public class Server {
                 Controller controller = new Controller(clientSocket);
                 controller.serverControl();
             }
+        } catch (SocketException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {

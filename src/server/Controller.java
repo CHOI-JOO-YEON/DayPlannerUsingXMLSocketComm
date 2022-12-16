@@ -7,6 +7,8 @@ import org.xml.sax.SAXException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Optional;
 
@@ -19,12 +21,16 @@ public class Controller {
     private static OutputStreamView outputStreamView;
     private static boolean connection = false;
     private static NewUser newUser;
+    private static PrintStream printStream;
 
     public Controller(Socket socket) throws IOException {
         this.socket = socket;
         user = new User(new File("source/user.xml"));
         userFileOutputView = new FileOutputView(user.getDocument());
         connection = true;
+        inputView = new InputView(socket.getInputStream());
+        outputStreamView = new OutputStreamView(socket.getOutputStream());
+        printStream = new PrintStream(new PrintWriter(new OutputStreamWriter(outputStreamView.outputStream)));
     }
 
     private void startPageMethod(String userOrder) throws IOException, SAXException {
@@ -107,9 +113,9 @@ public class Controller {
 
     void serverControl() throws IOException, SAXException, TransformerException {
         System.out.println(socket.getInetAddress() + "에서 접속했습니다.");
-        inputView = new InputView(socket.getInputStream());
-        outputStreamView = new OutputStreamView(socket.getOutputStream());
+
         while (true) {
+            printServerMessage();
             if (!connection) {
                 break;
             }
@@ -121,6 +127,15 @@ public class Controller {
             }
         }
 
+
+    }
+
+    private void printServerMessage() {
+        if (!checkLogin) {
+            printStream.printLoginMessage();
+        } else if (checkLogin) {
+            printStream.printUserMenuMessage();
+        }
 
     }
 }
