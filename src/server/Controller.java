@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -15,9 +16,11 @@ public class Controller {
     private static boolean checkLogin = false;
     private static User user;
     private static FileOutputView userFileOutputView;
+    private static OutputStreamView outputStreamView;
     private static boolean connection = false;
+    private static NewUser newUser;
 
-    public Controller(Socket socket) {
+    public Controller(Socket socket) throws IOException {
         this.socket = socket;
         user = new User(new File("source/user.xml"));
         userFileOutputView = new FileOutputView(user.getDocument());
@@ -32,17 +35,45 @@ public class Controller {
             join();
             return;
         } else if (userOrder.equals("exit")) {
-            socket.close();
-            connection = false;
+            exit();
             return;
         }
         System.out.println("잘못된 명령어");
     }
 
+    private void exit() throws IOException {
+        socket.close();
+        connection = false;
+        checkLogin = false;
+    }
+
+    private void userPageMethod(String userOrder) throws IOException, TransformerException, SAXException {
+        if (userOrder.equals("updateIntro")) {
+            updateIntro();
+            return;
+        } else if (userOrder.equals("exit")) {
+            exit();
+            return;
+        }
+        System.out.println("잘못된 명령어");
+    }
+
+    private void updateIntro() throws TransformerException, IOException, SAXException {
+        Optional<Document> document = user.returnIntroduceDocument(newUser.id);
+        if (!document.isEmpty()) {
+            outputStreamView.sendOutputUserIntro(document.get());
+            String intro = user.getIntroByInputSource(inputView.getUserSourceByInputStream());
+            userFileOutputView.updateUserXML(user.updateIntro(newUser.id, intro));
+            return;
+        }
+        System.out.println("error");
+
+    }
+
     private void login() throws IOException, SAXException {
         System.out.println("login");
         InputSource inputSource = inputView.getUserSourceByInputStream();
-        NewUser newUser = user.convertInputSourceToNewUser(inputSource);
+        newUser = user.convertInputSourceToNewUser(inputSource);
         if (user.isLogin(newUser.id, newUser.password)) {
             checkLogin = true;
             System.out.println("로그인 성공");
@@ -65,17 +96,19 @@ public class Controller {
 
     }
 
-    void serverControl() throws IOException, SAXException {
+    void serverControl() throws IOException, SAXException, TransformerException {
         System.out.println(socket.getInetAddress() + "에서 접속했습니다.");
         inputView = new InputView(socket.getInputStream());
-
+        outputStreamView = new OutputStreamView(socket.getOutputStream());
         while (true) {
             if (!connection) {
                 break;
             }
+            String userOrder = inputView.getUserOrderByInputStream();
             if (!checkLogin) {
-                String userOrder = inputView.getUserOrderByInputStream();
                 startPageMethod(userOrder);
+            } else if (checkLogin) {
+                userPageMethod(userOrder);
             }
         }
 

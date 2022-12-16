@@ -2,6 +2,7 @@ package server;
 
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,6 +28,8 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
             e.printStackTrace();
         }
     }

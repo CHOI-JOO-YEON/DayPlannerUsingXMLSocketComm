@@ -89,6 +89,16 @@ public class User {
         }
         return true;
     }
+
+    public  Optional<Document> returnIntroduceDocument(String id) {
+        String intro = getIntroByUserXML(id);
+        if (intro.equals("error")) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(createIntroduceDocument(intro));
+    }
+
+
     public Document createIntroduceDocument(String introduce) {
         Document introduceDocument = builder.newDocument();
         Element intro = introduceDocument.createElement("intro");
@@ -99,7 +109,7 @@ public class User {
 
     public String getIntroByUserXML(String id) {
         updateUserDataByUserXML();
-        String result="자기소개를 찾지 못 했습니다.";
+        String result="error";
         NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
@@ -134,6 +144,23 @@ public class User {
         return newUser;
     }
 
+    public String getIntroByInputSource(InputSource inputSource) throws IOException, SAXException {
+        Document inputDocument = builder.parse(inputSource);
+        return inputDocument.getElementsByTagName("intro").item(0).getChildNodes().item(0).getNodeValue();
+    }
+
+    public Document updateIntro(String id, String intro) {
+        updateUserDataByUserXML();
+        NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (getIdByNode(node).equals(id)) {
+                node.getChildNodes().item(5).getFirstChild().setNodeValue(intro);
+                break;
+            }
+        }
+        return document;
+    }
     private String getPasswordByNode(Node node) {
         return node.getChildNodes().item(3).getFirstChild().getNodeValue();
     }
