@@ -51,6 +51,9 @@ public class Controller {
         if (userOrder.equals("updateIntro")) {
             updateIntro();
             return;
+        } else if (userOrder.equals("userList")) {
+            returnUserList();
+            return;
         } else if (userOrder.equals("exit")) {
             exit();
             return;
@@ -58,10 +61,16 @@ public class Controller {
         System.out.println("잘못된 명령어");
     }
 
+    private void returnUserList() throws TransformerException {
+        Document returnDocument = user.getUserListWithoutPassword();
+        outputStreamView.sendXML(returnDocument);
+
+    }
+
     private void updateIntro() throws TransformerException, IOException, SAXException {
         Optional<Document> document = user.returnIntroduceDocument(newUser.id);
         if (!document.isEmpty()) {
-            outputStreamView.sendOutputUserIntro(document.get());
+            outputStreamView.sendXML(document.get());
             String intro = user.getIntroByInputSource(inputView.getUserSourceByInputStream());
             userFileOutputView.updateUserXML(user.updateIntro(newUser.id, intro));
             return;

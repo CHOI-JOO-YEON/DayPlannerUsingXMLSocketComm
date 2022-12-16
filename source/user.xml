@@ -1,31 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Fig. 8.12 : intro.xml             --><!-- Simple introduction to XML markup --><!DOCTYPE userList SYSTEM "user.dtd">
 <userList>
+                
+    
+    
+    <user>
+                                
+        
+        
+        <id>Joo</id>
+                                
+        
+        
+        <password>1234</password>
+                                
+        
+        
+        <intro>내 이름은 JOO야</intro>
+                            
+    
+    
+    </user>
             
+    
     
     <user>
                         
         
-        <id>Joo</id>
+        <id>Kim</id>
                         
         
-        <password>1234</password>
+        <password>12345678</password>
                         
         
-        <intro>dd</intro>
+        <intro>Hi</intro>
                     
     
     </user>
         
-    
-    <user>
-                
-        <id>Kim</id>
-                
-        <password>12345678</password>
-                
-        <intro>Hi</intro>
-            
-    </user>
-    
+
 </userList>

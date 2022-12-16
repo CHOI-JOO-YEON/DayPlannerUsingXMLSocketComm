@@ -27,7 +27,7 @@ public class OutputStreamView {
             e.printStackTrace();
         }
     }
-    public void sendOutputUserIntro(Document document) throws TransformerException {
+    public void sendXML(Document document) throws TransformerException {
         transformer.transform(new DOMSource(document), new StreamResult(outputStream));
     }
 

@@ -161,6 +161,30 @@ public class User {
         }
         return document;
     }
+    public Document getUserListWithoutPassword() {
+        updateUserDataByUserXML();
+        Document userListDocument = builder.newDocument();
+        NodeList nodeList = document.getDocumentElement().getElementsByTagName("user");
+        Element userList =  userListDocument.createElement("userList");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            Element user = userListDocument.createElement("user");
+            createUserElement(userListDocument, node, user);
+            userList.appendChild(user);
+        }
+        userListDocument.appendChild(userList);
+        return userListDocument;
+    }
+
+    private void createUserElement(Document userListDocument, Node node, Element user) {
+        Element id = userListDocument.createElement("id");
+        Element intro = userListDocument.createElement("intro");
+        id.appendChild(userListDocument.createTextNode(getIdByNode(node)));
+        intro.appendChild(userListDocument.createTextNode(getIntroduceByNode(node)));
+        user.appendChild(id);
+        user.appendChild(intro);
+    }
+
     private String getPasswordByNode(Node node) {
         return node.getChildNodes().item(3).getFirstChild().getNodeValue();
     }
