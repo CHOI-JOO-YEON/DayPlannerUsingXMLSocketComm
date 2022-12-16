@@ -11,5 +11,4 @@ public class NewUser {
     String intro;
 
 
-
 }

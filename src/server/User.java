@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -115,6 +116,19 @@ public class User {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public NewUser convertInputSourceToNewUser(InputSource inputSource) throws IOException, SAXException {
+        Document inputDocument = builder.parse(inputSource);
+        String id = inputDocument.getDocumentElement().getElementsByTagName("id").item(0).getChildNodes().item(0).getNodeValue();
+        String password = inputDocument.getDocumentElement().getElementsByTagName("password").item(0).getChildNodes().item(0).getNodeValue();
+        String intro = "";
+        if (inputDocument.getDocumentElement().getElementsByTagName("intro").getLength() != 0) {
+            intro = inputDocument.getDocumentElement().getElementsByTagName("intro").item(0).getChildNodes().item(0).getNodeValue();
+        }
+
+        NewUser newUser = new NewUser(id, password, intro);
+        return newUser;
+
     }
 
     private String getPasswordByNode(Node node) {

@@ -1,5 +1,7 @@
 package server;
 
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,12 +19,13 @@ public class Server {
     public void runServer() {
         try {
             socket = new ServerSocket(10020, 100);
-            while (true) {
-                Socket clientSocket = socket.accept();
-                System.out.println(clientSocket.getInetAddress()+"에서 접속했습니다.");
-            }
+            Socket clientSocket = socket.accept();
+            Controller controller = new Controller(clientSocket);
+            controller.serverControl();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
             e.printStackTrace();
         }
     }
