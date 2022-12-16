@@ -6,9 +6,10 @@ public class NewUser {
         this.password = password;
         this.intro = intro;
     }
-
     String id;
     String password;
     String intro;
+
+
 
 }

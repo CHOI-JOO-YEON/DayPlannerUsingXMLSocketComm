@@ -1,9 +1,8 @@
 package server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.xml.sax.InputSource;
+
+import java.io.*;
 
 public class InputView {
     InputStream inputStream;
@@ -16,5 +15,13 @@ public class InputView {
 
     String getUserOrderByInputStream() throws IOException {
         return bufferedReader.readLine();
+    }
+    int getBufferSize() throws IOException {
+        return inputStream.available();
+    }
+    InputSource getUserSourceByInputStream(int bufferSize) throws IOException {
+        byte buf[] = new byte[bufferSize];
+        inputStream.read(buf);
+        return new InputSource(new ByteArrayInputStream(buf));
     }
 }
