@@ -11,7 +11,6 @@ public class PrintStream {
 
     void printLoginMessage() {
         printWriter.println("명령어를 입력하시오(login, join, exit)");
-        System.out.println("명령어를 입력하시오(login, join, exit)");
         printWriter.flush();
     }
     void printUserMenuMessage() {
