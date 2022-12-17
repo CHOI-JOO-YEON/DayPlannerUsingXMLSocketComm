@@ -9,13 +9,12 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class Server {
-
+    private String filePath = "source/user.xml";
     private ServerSocket socket;
 
     public static void main(String[] args) {
         Server server = new Server();
         server.runServer();
-
     }
 
     public void runServer() {
@@ -23,11 +22,11 @@ public class Server {
             socket = new ServerSocket(10020, 100);
             while (true) {
                 Socket clientSocket = socket.accept();
-                Controller controller = new Controller(clientSocket);
+                ServerController controller = new ServerController(clientSocket, filePath);
                 controller.serverControl();
             }
         } catch (SocketException e) {
-            e.printStackTrace();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {

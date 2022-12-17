@@ -1,4 +1,6 @@
-package server;
+
+
+package server.View;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -13,13 +15,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class FileOutputView {
-
     private static TransformerFactory transformerFactory;
     private static Transformer transformer;
     private static Document document;
+
     public FileOutputView(Document document) {
-        this.document = document;
-        setTransformer();
+        FileOutputView.document = document;
+        this.setTransformer();
     }
 
     private void setTransformer() {
@@ -31,18 +33,20 @@ public class FileOutputView {
             transformer.setOutputProperty("omit-xml-declaration", "no");
             transformer.setOutputProperty("method", "xml");
             transformer.setOutputProperty("doctype-system", documentType.getSystemId());
-        }catch (TransformerConfigurationException e) {
-            e.printStackTrace();
+        } catch (TransformerConfigurationException var2) {
+            var2.printStackTrace();
         }
+
     }
 
     public void updateUserXML(Document document) {
         try {
             transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream("source/user.xml")));
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (TransformerException var3) {
+            var3.printStackTrace();
+        } catch (FileNotFoundException var4) {
+            var4.printStackTrace();
         }
+
     }
 }

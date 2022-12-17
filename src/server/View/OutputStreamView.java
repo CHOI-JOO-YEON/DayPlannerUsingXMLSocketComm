@@ -1,4 +1,5 @@
-package server;
+package server.View;
+
 
 import org.w3c.dom.Document;
 
@@ -11,24 +12,26 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.OutputStream;
 
 public class OutputStreamView {
-    OutputStream outputStream;
+    public static OutputStream outputStream;
     private static TransformerFactory transformerFactory;
     private static Transformer transformer;
 
     public OutputStreamView(OutputStream outputStream) {
         this.outputStream = outputStream;
-        setTransformer();
+        this.setTransformer();
     }
+
     private void setTransformer() {
         try {
             transformerFactory = TransformerFactory.newInstance();
             transformer = transformerFactory.newTransformer();
-        }catch (TransformerConfigurationException e) {
-            e.printStackTrace();
+        } catch (TransformerConfigurationException var2) {
+            var2.printStackTrace();
         }
-    }
-    public void sendXML(Document document) throws TransformerException {
-        transformer.transform(new DOMSource(document), new StreamResult(outputStream));
+
     }
 
+    public void sendXML(Document document) throws TransformerException {
+        transformer.transform(new DOMSource(document), new StreamResult(this.outputStream));
+    }
 }
