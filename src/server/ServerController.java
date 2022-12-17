@@ -23,6 +23,8 @@ public class ServerController {
     private static boolean connection = false;
     private static NewUser newUser;
     private static PrintStreamView printStreamView;
+    private static boolean sendStartMethodXML = false;
+    private static boolean sendUserMethodXML =false;
 
     public ServerController(Socket socket, String filePath) throws IOException {
         this.socket = socket;
@@ -111,25 +113,24 @@ public class ServerController {
 
     void serverControl() throws IOException, SAXException, TransformerException {
         ServerOutputView.clientConnectMessage(socket.getInetAddress());
-        while (true) {
+        while (connection) {
             printServerMessage();
-            if (!connection) {
-                break;
-            }
-            String userOrder = inputView.getUserOrderByInputStream();
-            if (!checkLogin) {
-                startPageMethod(userOrder);
-            } else if (checkLogin) {
-                userPageMethod(userOrder);
-            }
+            checkUserOrder();
         }
+    }
 
-
+    private void checkUserOrder() throws IOException, SAXException, TransformerException {
+        String userOrder = inputView.getUserOrderByInputStream();
+        if (!checkLogin) {
+            startPageMethod(userOrder);
+        } else if (checkLogin) {
+            userPageMethod(userOrder);
+        }
     }
 
     private void printServerMessage() {
-        if (!checkLogin) {
-            printStreamView.printLoginMessage();
+        if (!checkLogin && !sendUserMethodXML) {
+            outputStreamView.sendXML();
         } else if (checkLogin) {
             printStreamView.printUserMenuMessage();
         }
