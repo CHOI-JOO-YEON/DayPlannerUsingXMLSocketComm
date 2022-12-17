@@ -16,17 +16,20 @@ import java.util.Optional;
 public class ServerController {
     private static Socket socket;
     private static InputView inputView;
-    private static boolean checkLogin = false;
+    private static boolean checkLogin;
     private static User user;
     private static FileOutputView userFileOutputView;
     private static OutputStreamView outputStreamView;
-    private static boolean connection = false;
+    private static boolean connection;
     private static NewUser newUser;
     private static PrintStreamView printStreamView;
-    private static boolean sendStartMethodXML = false;
-    private static boolean sendUserMethodXML =false;
+    private static boolean sendStartMethodXML;
+    private static boolean sendUserMethodXML;
 
     public ServerController(Socket socket, String filePath) throws IOException {
+        checkLogin = false;
+        sendStartMethodXML = false;
+        sendUserMethodXML = false;
         this.socket = socket;
         user = new User(new File(filePath));
         userFileOutputView = new FileOutputView(user.getDocument());
@@ -53,6 +56,8 @@ public class ServerController {
         socket.close();
         connection = false;
         checkLogin = false;
+        sendStartMethodXML = false;
+        sendUserMethodXML = false;
     }
 
     private void userPageMethod(String userOrder) throws IOException, TransformerException, SAXException {
@@ -128,11 +133,13 @@ public class ServerController {
         }
     }
 
-    private void printServerMessage() {
-        if (!checkLogin && !sendUserMethodXML) {
-            outputStreamView.sendXML();
-        } else if (checkLogin) {
-            printStreamView.printUserMenuMessage();
+    private void printServerMessage() throws IOException, SAXException, TransformerException {
+        if (!checkLogin && !sendStartMethodXML) {
+            outputStreamView.sendXML(Orders.getStartMethodXML());
+            sendStartMethodXML = true;
+        } else if (checkLogin && !sendUserMethodXML) {
+            outputStreamView.sendXML(Orders.getUserMethodXML());
+            sendUserMethodXML = true;
         }
 
     }

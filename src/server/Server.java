@@ -20,19 +20,26 @@ public class Server {
     public void runServer() {
         try {
             socket = new ServerSocket(10020, 100);
-            while (true) {
-                Socket clientSocket = socket.accept();
-                ServerController controller = new ServerController(clientSocket, filePath);
-                controller.serverControl();
-            }
-        } catch (SocketException e) {
-
+            serverRun();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (TransformerException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void serverRun() throws IOException, SAXException, TransformerException {
+        while (true) {
+            try {
+                Socket clientSocket = socket.accept();
+                ServerController controller = new ServerController(clientSocket, filePath);
+                controller.serverControl();
+            } catch (SocketException socketException) {
+
+            }
+
         }
     }
 }
