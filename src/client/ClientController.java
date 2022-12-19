@@ -1,5 +1,6 @@
 package client;
 
+import client.View.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -106,7 +107,7 @@ public class ClientController {
         Document userRecentIntro = clientService.createIntroDocumentByInputSource(inputSource);
 
         String recentIntro = String.valueOf(userRecentIntro.getElementsByTagName("intro").item(0).getFirstChild().getNodeValue());
-        System.out.println("현재 자기소개 "+recentIntro);
+        System.out.println("현재 자기소개 " + recentIntro);
         System.out.println("바꿀 자기소개를 입력하세요");
         String result = bufferedReader.readLine();
         System.out.println("이걸로 괜찮으시겠습니까?: " + result + "(y/n)");
@@ -128,7 +129,7 @@ public class ClientController {
         if (!boolStartOrders) {
             setOrdersStart();
         }
-        while (!loginStatus &&!boolEnd) {
+        while (!loginStatus && !boolEnd) {
             ClientOutputView.printOrders(orders.startOrders);
             String userInput = bufferedReader.readLine();
             String order = orders.getStartOrderByUserInput(userInput);
@@ -155,33 +156,47 @@ public class ClientController {
     }
 
     private void join() throws IOException, TransformerException {
-        ClientOutputView.printRequestIDInputMessage();
-        String id = clientInputView.getStringByUserInput();
-        ClientOutputView.printRequestPasswordInputMessage();
-        String password = clientInputView.getStringByUserInput();
-        ClientOutputView.printRequestIntroInputMessage();
-        String intro = clientInputView.getStringByUserInput();
-
-        Document document = clientService.createJoinXML(id, password, intro);
-        outputStreamView.sendXML(document);
-        if (inputView.getServerMessageByInputStream().equals("성공")) {
-            loginStatus = true;
-            System.out.println("회원가입 성공");
+        try {
+            ClientOutputView.printRequestIDInputMessage();
+            String id = clientInputView.getStringByUserInput();
+            ClientOutputView.printRequestPasswordInputMessage();
+            String password = clientInputView.getStringByUserInput();
+            ClientOutputView.printRequestIntroInputMessage();
+            String intro = clientInputView.getStringByUserInput();
+            Document document = clientService.createJoinXML(id, password, intro);
+            outputStreamView.sendXML(document);
+            if (inputView.getServerMessageByInputStream().equals("성공")) {
+                ClientOutputView.printSuccessMessage();
+                return;
+            }
+            ClientOutputView.printFailMessage();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
+
+
+
 
     }
 
     private void login() throws IOException, TransformerException {
-        ClientOutputView.printRequestIDInputMessage();
-        String id = clientInputView.getStringByUserInput();
-        ClientOutputView.printRequestPasswordInputMessage();
-        String password = clientInputView.getStringByUserInput();
+        try {
 
-        Document document = clientService.createLoginXML(id, password);
-        outputStreamView.sendXML(document);
-        if (inputView.getServerMessageByInputStream().equals("성공")) {
-            loginStatus = true;
-            System.out.println("로그인 성공");
+            ClientOutputView.printRequestIDInputMessage();
+            String id = clientInputView.getStringByUserInput();
+            ClientOutputView.printRequestPasswordInputMessage();
+            String password = clientInputView.getStringByUserInput();
+
+            Document document = clientService.createLoginXML(id, password);
+            outputStreamView.sendXML(document);
+            if (inputView.getServerMessageByInputStream().equals("성공")) {
+                loginStatus = true;
+                ClientOutputView.printSuccessMessage();
+                return;
+            }
+            ClientOutputView.printFailMessage();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -190,6 +205,7 @@ public class ClientController {
         orders.setStartOrders(document);
         boolStartOrders = true;
     }
+
     private String getIdByNode(Node node) {
         return node.getChildNodes().item(0).getFirstChild().getNodeValue();
     }
@@ -197,10 +213,4 @@ public class ClientController {
     private String getIntroduceByNode(Node node) {
         return node.getChildNodes().item(1).getFirstChild().getNodeValue();
     }
-}
-
-class NewUser {
-    String id;
-    String password;
-    String intro;
 }

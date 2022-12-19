@@ -29,7 +29,6 @@ public class FileOutputView {
             transformerFactory = TransformerFactory.newInstance();
             transformer = transformerFactory.newTransformer();
             DocumentType documentType = document.getImplementation().createDocumentType("doctype", "", "user.dtd");
-            transformer.setOutputProperty("indent", "yes");
             transformer.setOutputProperty("omit-xml-declaration", "no");
             transformer.setOutputProperty("method", "xml");
             transformer.setOutputProperty("doctype-system", documentType.getSystemId());

@@ -1,4 +1,4 @@
-package client;
+package client.View;
 
 import org.w3c.dom.Document;
 

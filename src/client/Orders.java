@@ -35,7 +35,10 @@ public class Orders {
     public String getUserOrderByUserInput(String userInput) {
         try {
             int n = Integer.parseInt(userInput);
-            return userOrders.get(n);
+            if (userOrders.containsKey(n)) {
+                return userOrders.get(n);
+            }
+            return "error";
         } catch (NumberFormatException e) {
             return "error";
         }
@@ -44,7 +47,12 @@ public class Orders {
     public String getStartOrderByUserInput(String userInput) {
         try {
             int n = Integer.parseInt(userInput);
-            return startOrders.get(n);
+
+            if (startOrders.containsKey(n)) {
+                return startOrders.get(n);
+            }
+            return "error";
+
         } catch (NumberFormatException e) {
             return "error";
         }

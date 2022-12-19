@@ -1,4 +1,4 @@
-package client;
+package client.View;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,7 +9,7 @@ public class ClientOutputView {
     }
 
     public static void printOrders(ConcurrentHashMap<Integer, String> orders) {
-        System.out.print("명령어를 입력하세요 (");
+        System.out.print("명령어  번호를 입력하세요 (");
         for (Map.Entry<Integer, String> integerStringEntry : orders.entrySet()) {
             System.out.print(integerStringEntry.getKey()+". "+integerStringEntry.getValue()+" ");
         }
@@ -32,6 +32,14 @@ public class ClientOutputView {
 
     public static void printRequestPasswordInputMessage() {
         System.out.println("비밀번호를 입력하세요");
+    }
+
+    public static void printSuccessMessage() {
+        System.out.println("성공");
+    }
+
+    public static void printFailMessage() {
+        System.out.println("실패");
     }
 
 }

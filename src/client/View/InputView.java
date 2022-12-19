@@ -1,4 +1,4 @@
-package client;
+package client.View;
 
 
 import org.xml.sax.InputSource;
@@ -14,7 +14,11 @@ public class InputView {
         bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
     }
     public String getServerMessageByInputStream() throws IOException {
-        return this.bufferedReader.readLine();
+        String message = bufferedReader.readLine();
+        if (message == null) {
+            return "";
+        }
+        return message;
     }
 
     public InputSource getServerSourceByInputStream() throws IOException {
